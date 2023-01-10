@@ -5,6 +5,7 @@ import Button from '../button/button.component';
 import './sign-in-form.styles.scss';
 
 
+
 //importing functions for authentication with firebase
 import {
     signInWithGooglePopup,
@@ -25,14 +26,15 @@ const SignInForm = () =>{
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { email, password } = formFields;
 
+
         //used to reset the form input fields after the form has been submitted
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
     }
         //displays googleSignInPopup after the button is clicked
     const SignInWithGoogle = async () => {
-        const {user} = await signInWithGooglePopup();
-         await createUserDocumentFromAuth(user);
+        await signInWithGooglePopup();
+         
     }
 
 
@@ -42,9 +44,11 @@ const SignInForm = () =>{
 
 
         try{
-            const response = await signInAuthUserWithEmailAndPassword(email, password);
+            const {user} = await signInAuthUserWithEmailAndPassword(
+                email,
+                password
+            );
             resetFormFields();
-            console.log(response);
 
         }   catch(error){
             switch(error.code){

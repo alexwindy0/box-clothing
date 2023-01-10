@@ -4,8 +4,13 @@ import FormInput from '../form-input/form-input.component';
 import './sign-up-form.styles.scss';
 import Button from '../button/button.component';
 
-import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth} from '../../utils/firebase/firebase.utils';
 
+import { 
+    createAuthUserWithEmailAndPassword, 
+    createUserDocumentFromAuth
+} from '../../utils/firebase/firebase.utils';
+
+//declaring defaultFormFields as an Object
 const defaultFormFields = {
     displayName: '',
     email: '',
@@ -20,8 +25,6 @@ and remounted */
 const SignUpForm = () =>{
     const [formFields, setFormFields] = useState(defaultFormFields);
     const {displayName, email, password, confirmPassword} = formFields;
-
-    console.log(formFields);
 
         //used to reset the form input fields after the form has been submitted
     const resetFormFields = () => {
@@ -39,10 +42,12 @@ const SignUpForm = () =>{
 
         try{
             const { user } = await createAuthUserWithEmailAndPassword(email, password);
-            //calling the resetFormField function after the form have been Submitted
-            resetFormFields();
+                await createUserDocumentFromAuth(user, {displayName});
 
-            await createUserDocumentFromAuth(user, {displayName});
+             //calling the resetFormField function after the form have been Submitted
+             resetFormFields();
+
+
         }   catch(error){
             if(error.code === 'auth/email-already-in-use'){
                 alert("cannot create user, email already in use");
